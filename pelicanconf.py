@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = 'Ryan Cooper'
 SITENAME = 'Maptastik!'
-SITEURL = ''
+SITEURL = 'http://ryan-m-cooper.com/blog'
 
 PATH = 'content'
 

@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maptastik!</title><link href="http://ryan-m-cooper.github.io/blog/" rel="alternate"></link><link href="http://ryan-m-cooper.github.io/blog/feeds/all.atom.xml" rel="self"></link><id>http://ryan-m-cooper.github.io/blog/</id><updated>2018-01-14T11:48:00-05:00</updated><entry><title>TEST</title><link href="http://ryan-m-cooper.github.io/blog/TEST.html" rel="alternate"></link><published>2018-01-14T11:48:00-05:00</published><updated>2018-01-14T11:48:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.github.io,2018-01-14:blog/TEST.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maptastik!</title><link href="http://ryan-m-cooper.com/blog/" rel="alternate"></link><link href="http://ryan-m-cooper.com/blog/feeds/all.atom.xml" rel="self"></link><id>http://ryan-m-cooper.com/blog/</id><updated>2018-01-14T14:20:00-05:00</updated><entry><title>TEST MARKDOWN</title><link href="http://ryan-m-cooper.com/blog/test-markdown.html" rel="alternate"></link><published>2018-01-14T14:20:00-05:00</published><updated>2018-01-14T14:20:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.com,2018-01-14:blog/test-markdown.html</id><summary type="html">&lt;h1&gt;Here's a gist&lt;/h1&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/7df70cf854c8f009cdae5eb69e4c3406.js'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;import pandas as pd
+from arcgis.gis import GIS
+
+# Login to AGOL
+gis = GIS()
+
+# For other login methods see: https://developers.arcgis.com/python/guide/working-with-different-authentication-schemes/
+# use for logging in within active ArcGIS Pro session
+# gis = GIS('pro')
+
+# Create a function that returns a list of feature layer collections for a search
+def agolSearch(term):
+    item_list = []
+    items = gis.content.search(term, item_type="Feature Layer Collection")
+    for item in items:
+        item_list.append(item)
+    return item_list
+  
+results = agolSearch('search terms')
+results_select = results[0] # select the index postions at which the item you want is positione. This example selects the first result.
+# Create dataframe from selected dataset
+results_select_df = results_select.layers[0].query().df
+
+# Check out the first 5 records of the new DataFrame
+results_select_df.head()&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;h1&gt;Here's another&lt;/h1&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/0240063363f4d3b36434ebfe46904f5d.js'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"title":"Lenox Library","icon":"library"},"geometry":{"type":"Point","coordinates":[-73.2846075296402,42.357402275315934]}},{"type":"Feature","properties":{"title":"Prime","icon":"restaurant"},"geometry":{"type":"Point","coordinates":[-73.28294724225998,42.359822294281145]}}]}&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;</summary><category term="pelican"></category><category term="publishing"></category></entry><entry><title>TEST</title><link href="http://ryan-m-cooper.com/blog/TEST.html" rel="alternate"></link><published>2018-01-14T11:48:00-05:00</published><updated>2018-01-14T11:48:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.com,2018-01-14:blog/TEST.html</id><summary type="html">&lt;style type="text/css"&gt;/*!
 *
 * IPython notebook
 *
