@@ -80,7 +80,19 @@ def remoteGeoJSONToGDF(url, display = False):
         gdf.plot()
     return gdf</code></pre>
     </noscript>
-</div></div>
+</div>
+<p>What’s going on here? We use requests to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, gdf, by having gpd.GeoDataFrame.from_features() iterate through the features in our GeoJSON. Finally, we return gdf so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set display to True when you call the function.</p>
+<p>For example, let’s say we want to look at the City of Raleigh council districts:</p>
+<div class="gist">
+    <script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'></script>
+    <noscript>
+        <pre><code>districts = remoteGeoJSONToGDF('http://data-ral.opendata.arcgis.com/datasets/9a5733e13dd14e2f80f8517738ce8cc6_2.geojson')
+districts.plot(column = 'COUNCIL_DIST')</code></pre>
+    </noscript>
+</div>
+<p>In line 1 we pass the URL of council district GeoJSON on Raleigh’s open data site and assign the returned GeoDataFrame to a variable, districts. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.</p>
+<p><img alt="Plot of Raleigh city council districts generated from remote GeoJSON" src="http://ryan-m-cooper.com/blog/images/remote-geojson-to-geodataframe_1.png" /></p>
+<p>This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!</p></div>
 	<hr>
 	<h2>Comments</h2>
 </div>
@@ -96,6 +108,7 @@ def remoteGeoJSONToGDF(url, display = False):
 						<h4>Navigation</h4>
 						<ul class="list-unstyled my-list-style">
 							<li><a href="http://ryan-m-cooper.com/blog">Maptastik!</a></li>
+							<li><a href="http://ryan-m-cooper.com/blog/feeds/all.atom.xml" type="application/atom+xml"><i class="fa fa-rss "></i> atom</a></li>
 						</ul>
 					</div>
 					<div class="col-md-3">

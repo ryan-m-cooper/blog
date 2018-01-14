@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Maptastik!</title><link href="http://ryan-m-cooper.com/blog/" rel="alternate"></link><link href="http://ryan-m-cooper.com/blog/feeds/python.atom.xml" rel="self"></link><id>http://ryan-m-cooper.com/blog/</id><updated>2018-01-14T14:20:00-05:00</updated><entry><title>TEST MARKDOWN</title><link href="http://ryan-m-cooper.com/blog/test-markdown.html" rel="alternate"></link><published>2018-01-14T14:20:00-05:00</published><updated>2018-01-14T14:20:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.com,2018-01-14:blog/test-markdown.html</id><summary type="html">&lt;h1&gt;Here's a gist&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Maptastik!</title><link href="http://ryan-m-cooper.com/blog/" rel="alternate"></link><link href="http://ryan-m-cooper.com/blog/feeds/python.atom.xml" rel="self"></link><id>http://ryan-m-cooper.com/blog/</id><updated>2018-01-14T16:56:00-05:00</updated><entry><title>Remote GeoJSON to GeoDataFrame</title><link href="http://ryan-m-cooper.com/blog/remote-geojson-to-geodataframe.html" rel="alternate"></link><published>2018-01-14T16:56:00-05:00</published><updated>2018-01-14T16:56:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.com,2017-11-01:blog/remote-geojson-to-geodataframe.html</id><summary type="html">&lt;h1&gt;Remote GeoJSON to GeoDataFrame&lt;/h1&gt;
+&lt;p&gt;I’m inspired by Stephen Smith’s quick post about rapid prototyping during his lunch break. Lately I’ve been using my lunch break to watch videos that are both related to the work I do for the City of Raleigh Park, Recreation &amp;amp; Cultural Resources Department and of interest to me. But sometimes I’d rather just mess around while I eat my turkey sandwich. I did just that today.&lt;/p&gt;
+&lt;p&gt;We’re an Esri shop here at City of Raleigh, so most of my day-to-day is spent in that ecosystem. That said, I’ve been really interested in the Python library geopandas for a bit now and wanted to spend my lunch with it.&lt;/p&gt;
+&lt;p&gt;One thing that’s great about geopandas is that you can read in all sorts of different data using gpd.read_file(). That’s great if you have a Shapefile or some GeoJSON on your machine. But what if you want to pull in some data from a URL? gpd.read_file() isn’t going to work.&lt;/p&gt;
+&lt;p&gt;So during lunch I messed around (e.g. Wrote some Python using Spyder, Googled things, ducked into Stack Overflow) and cobbled together a little function that takes a URL pointing to some GeoJSON as an input and returns a GeoDataFrame:&lt;/p&gt;
 &lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/7df70cf854c8f009cdae5eb69e4c3406.js'&gt;&lt;/script&gt;
+    &lt;script src='https://gist.github.com/6030df87e8bd62fa583a83ecea9fceab.js'&gt;&lt;/script&gt;
     &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;import pandas as pd
-from arcgis.gis import GIS
+        &lt;pre&gt;&lt;code&gt;import requests, json, geopandas as gpd
 
-# Login to AGOL
-gis = GIS()
-
-# For other login methods see: https://developers.arcgis.com/python/guide/working-with-different-authentication-schemes/
-# use for logging in within active ArcGIS Pro session
-# gis = GIS('pro')
-
-# Create a function that returns a list of feature layer collections for a search
-def agolSearch(term):
-    item_list = []
-    items = gis.content.search(term, item_type="Feature Layer Collection")
-    for item in items:
-        item_list.append(item)
-    return item_list
-  
-results = agolSearch('search terms')
-results_select = results[0] # select the index postions at which the item you want is positione. This example selects the first result.
-# Create dataframe from selected dataset
-results_select_df = results_select.layers[0].query().df
-
-# Check out the first 5 records of the new DataFrame
-results_select_df.head()&lt;/code&gt;&lt;/pre&gt;
+def remoteGeoJSONToGDF(url, display = False):
+    """Import remote GeoJSON to a GeoDataFrame
+    Keyword arguments:
+    url -- URL to GeoJSON resource on web
+    display -- Displays geometries upon loading (default: False)
+    """
+    r = requests.get(url)
+    data = r.json()
+    gdf = gpd.GeoDataFrame.from_features(data['features'])
+    if display:
+        gdf.plot()
+    return gdf&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;h1&gt;Here's another&lt;/h1&gt;
+&lt;p&gt;What’s going on here? We use requests to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, gdf, by having gpd.GeoDataFrame.from_features() iterate through the features in our GeoJSON. Finally, we return gdf so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set display to True when you call the function.&lt;/p&gt;
+&lt;p&gt;For example, let’s say we want to look at the City of Raleigh council districts:&lt;/p&gt;
 &lt;div class="gist"&gt;
-    &lt;script src='https://gist.github.com/0240063363f4d3b36434ebfe46904f5d.js'&gt;&lt;/script&gt;
+    &lt;script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'&gt;&lt;/script&gt;
     &lt;noscript&gt;
-        &lt;pre&gt;&lt;code&gt;{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"title":"Lenox Library","icon":"library"},"geometry":{"type":"Point","coordinates":[-73.2846075296402,42.357402275315934]}},{"type":"Feature","properties":{"title":"Prime","icon":"restaurant"},"geometry":{"type":"Point","coordinates":[-73.28294724225998,42.359822294281145]}}]}&lt;/code&gt;&lt;/pre&gt;
+        &lt;pre&gt;&lt;code&gt;districts = remoteGeoJSONToGDF('http://data-ral.opendata.arcgis.com/datasets/9a5733e13dd14e2f80f8517738ce8cc6_2.geojson')
+districts.plot(column = 'COUNCIL_DIST')&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
-&lt;/div&gt;</summary><category term="pelican"></category><category term="publishing"></category></entry></feed>
+&lt;/div&gt;
+&lt;p&gt;In line 1 we pass the URL of council district GeoJSON on Raleigh’s open data site and assign the returned GeoDataFrame to a variable, districts. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Plot of Raleigh city council districts generated from remote GeoJSON" src="http://ryan-m-cooper.com/blog/images/remote-geojson-to-geodataframe_1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!&lt;/p&gt;</summary><category term="geopandas"></category><category term="geojson"></category><category term="Python Pandas"></category><category term="Python"></category></entry></feed>

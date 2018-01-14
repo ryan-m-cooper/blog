@@ -18,3 +18,15 @@ One thing that’s great about geopandas is that you can read in all sorts of di
 So during lunch I messed around (e.g. Wrote some Python using Spyder, Googled things, ducked into Stack Overflow) and cobbled together a little function that takes a URL pointing to some GeoJSON as an input and returns a GeoDataFrame:
 
 [gist:id=6030df87e8bd62fa583a83ecea9fceab]
+
+What’s going on here? We use requests to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, gdf, by having gpd.GeoDataFrame.from_features() iterate through the features in our GeoJSON. Finally, we return gdf so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set display to True when you call the function.
+
+For example, let’s say we want to look at the City of Raleigh council districts:
+
+[gist:id=803cbff714ca3353b62baa2c612905ee]
+
+In line 1 we pass the URL of council district GeoJSON on Raleigh’s open data site and assign the returned GeoDataFrame to a variable, districts. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.
+
+![Plot of Raleigh city council districts generated from remote GeoJSON]({filename}/images/remote-geojson-to-geodataframe_1.png)
+
+This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!

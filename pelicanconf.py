@@ -7,6 +7,7 @@ SITENAME = 'Maptastik!'
 SITEURL = 'http://ryan-m-cooper.com/blog'
 
 PATH = 'content'
+STATIC_PATHS = ['images']
 
 TIMEZONE = 'America/New_York'
 
