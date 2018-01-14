@@ -14,8 +14,11 @@
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
-	<link href="{{ SITEURL }}/theme/css/local.css" rel="stylesheet">
-	<link href="{{ SITEURL }}/theme/css/pygments.css" rel="stylesheet">
+	<!-- <link href="{{ SITEURL }}/theme/css/local.css" rel="stylesheet">
+	<link href="{{ SITEURL }}/theme/css/pygments.css" rel="stylesheet"> -->
+    <link href="./theme/css/local.css" rel="stylesheet">
+	<link href="./theme/css/pygments.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 	{% block head %}{% endblock %}
 </head>
 <body>
@@ -25,13 +28,13 @@
 			<br>{% if SITESUBTITLE %}<small>{{ SITESUBTITLE }}</small></h1>{% endif %}
 	</div>
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div id="main-body" class="col-md-8 col-md-offset-2">
 			{% block content %}{% endblock %}
 		</div>
 	</div> {# End row #}
 	<!-- <hr> -->
 </div> <!-- /container -->
-<footer class="aw-footer bg-danger">
+<footer>
 	<div class="container"> <!-- footer -->
 		<div class="row">
 			<div class="col-md-10 col-md-offset-1">

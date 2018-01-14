@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>TEST MARKDOWN — Maptastik!</title>
-	<meta name="description" content="Title: TEST MARKDOWN; Date: 2018-01-14; Author: Ryan Cooper">
+	<title>Remote GeoJSON to GeoDataFrame — Maptastik!</title>
+	<meta name="description" content="Title: Remote GeoJSON to GeoDataFrame; Date: 2017-11-01; Author: Ryan Cooper">
 	<meta name="author" content="Ryan Cooper">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -29,11 +29,11 @@
 		<div id="main-body" class="col-md-8 col-md-offset-2">
 <div class="article" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="text-center article-header">
-		<h1 itemprop="name headline" class="article-title">TEST MARKDOWN</h1>
+		<h1 itemprop="name headline" class="article-title">Remote GeoJSON to GeoDataFrame</h1>
 		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
 			<h4 itemprop="name">Ryan Cooper</h4>
 		</span>
-		<time datetime="2018-01-14T14:20:00-05:00" itemprop="datePublished">Sun 14 January 2018</time>
+		<time datetime="2017-11-01T13:00:00-04:00" itemprop="datePublished">Wed 01 November 2017</time>
 	</div>
 	<div>
 		Category:
@@ -45,48 +45,40 @@
 	<div>
 		Tags:
 		<span itemprop="keywords">
-			<a href="http://ryan-m-cooper.com/blog/tag/pelican.html" rel="tag">pelican</a>
+			<a href="http://ryan-m-cooper.com/blog/tag/geopandas.html" rel="tag">geopandas</a>
 		</span>
 		<span itemprop="keywords">
-			<a href="http://ryan-m-cooper.com/blog/tag/publishing.html" rel="tag">publishing</a>
+			<a href="http://ryan-m-cooper.com/blog/tag/geojson.html" rel="tag">geojson</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/python-pandas.html" rel="tag">Python Pandas</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/python.html" rel="tag">Python</a>
 		</span>
 	</div>
-	<div itemprop="articleBody" class="article-body"><h1>Here's a gist</h1>
+	<div itemprop="articleBody" class="article-body"><h1>Remote GeoJSON to GeoDataFrame</h1>
+<p>I’m inspired by Stephen Smith’s quick post about rapid prototyping during his lunch break. Lately I’ve been using my lunch break to watch videos that are both related to the work I do for the City of Raleigh Park, Recreation &amp; Cultural Resources Department and of interest to me. But sometimes I’d rather just mess around while I eat my turkey sandwich. I did just that today.</p>
+<p>We’re an Esri shop here at City of Raleigh, so most of my day-to-day is spent in that ecosystem. That said, I’ve been really interested in the Python library geopandas for a bit now and wanted to spend my lunch with it.</p>
+<p>One thing that’s great about geopandas is that you can read in all sorts of different data using gpd.read_file(). That’s great if you have a Shapefile or some GeoJSON on your machine. But what if you want to pull in some data from a URL? gpd.read_file() isn’t going to work.</p>
+<p>So during lunch I messed around (e.g. Wrote some Python using Spyder, Googled things, ducked into Stack Overflow) and cobbled together a little function that takes a URL pointing to some GeoJSON as an input and returns a GeoDataFrame:</p>
 <div class="gist">
-    <script src='https://gist.github.com/7df70cf854c8f009cdae5eb69e4c3406.js'></script>
+    <script src='https://gist.github.com/6030df87e8bd62fa583a83ecea9fceab.js'></script>
     <noscript>
-        <pre><code>import pandas as pd
-from arcgis.gis import GIS
+        <pre><code>import requests, json, geopandas as gpd
 
-# Login to AGOL
-gis = GIS()
-
-# For other login methods see: https://developers.arcgis.com/python/guide/working-with-different-authentication-schemes/
-# use for logging in within active ArcGIS Pro session
-# gis = GIS('pro')
-
-# Create a function that returns a list of feature layer collections for a search
-def agolSearch(term):
-    item_list = []
-    items = gis.content.search(term, item_type="Feature Layer Collection")
-    for item in items:
-        item_list.append(item)
-    return item_list
-  
-results = agolSearch('search terms')
-results_select = results[0] # select the index postions at which the item you want is positione. This example selects the first result.
-# Create dataframe from selected dataset
-results_select_df = results_select.layers[0].query().df
-
-# Check out the first 5 records of the new DataFrame
-results_select_df.head()</code></pre>
-    </noscript>
-</div>
-<h1>Here's another</h1>
-<div class="gist">
-    <script src='https://gist.github.com/0240063363f4d3b36434ebfe46904f5d.js'></script>
-    <noscript>
-        <pre><code>{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"title":"Lenox Library","icon":"library"},"geometry":{"type":"Point","coordinates":[-73.2846075296402,42.357402275315934]}},{"type":"Feature","properties":{"title":"Prime","icon":"restaurant"},"geometry":{"type":"Point","coordinates":[-73.28294724225998,42.359822294281145]}}]}</code></pre>
+def remoteGeoJSONToGDF(url, display = False):
+    """Import remote GeoJSON to a GeoDataFrame
+    Keyword arguments:
+    url -- URL to GeoJSON resource on web
+    display -- Displays geometries upon loading (default: False)
+    """
+    r = requests.get(url)
+    data = r.json()
+    gdf = gpd.GeoDataFrame.from_features(data['features'])
+    if display:
+        gdf.plot()
+    return gdf</code></pre>
     </noscript>
 </div></div>
 	<hr>
@@ -114,8 +106,7 @@ results_select_df.head()</code></pre>
 					<div class="col-md-3">
 						<h4>Categories</h4>
 						<ul class="list-unstyled my-list-style">
-							<li><a href="http://ryan-m-cooper.com/blog/category/posts.html">posts (1)</a></li>
-							<li><a href="http://ryan-m-cooper.com/blog/category/python.html">Python (2)</a></li>
+							<li><a href="http://ryan-m-cooper.com/blog/category/python.html">Python (1)</a></li>
 						</ul>
 					</div>
 				</div>
