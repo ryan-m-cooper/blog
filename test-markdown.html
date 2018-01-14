@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>posts — Maptastik!</title>
-	<meta name="description" content="All posts which refer to category posts">
+	<title>TEST MARKDOWN — Maptastik!</title>
+	<meta name="description" content="Title: TEST MARKDOWN; Date: 2018-01-14; Author: Ryan Cooper">
 	<meta name="author" content="Ryan Cooper">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -24,15 +24,71 @@
 			<br>	</div>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-<h1>Category <small>posts</small></h1>
-<table class="table">
-    <tbody>
-        <tr>
-        <td>14 Jan 2018</td>
-        <td><a href='/TEST.html'>TEST</a></td>
-        </tr>
-    </tbody>
-</table>
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">TEST MARKDOWN</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Ryan Cooper</h4>
+		</span>
+		<time datetime="2018-01-14T14:20:00-05:00" itemprop="datePublished">Sun 14 January 2018</time>
+	</div>
+	<div>
+		Category:
+		<span itemprop="articleSection">
+			<a href="/category/python.html" rel="category">Python</a>
+		</span>
+	</div>
+ 
+	<div>
+		Tags:
+		<span itemprop="keywords">
+			<a href="/tag/pelican.html" rel="tag">pelican</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="/tag/publishing.html" rel="tag">publishing</a>
+		</span>
+	</div>
+	<div itemprop="articleBody" class="article-body"><h1>Here's a gist</h1>
+<div class="gist">
+    <script src='https://gist.github.com/7df70cf854c8f009cdae5eb69e4c3406.js'></script>
+    <noscript>
+        <pre><code>import pandas as pd
+from arcgis.gis import GIS
+
+# Login to AGOL
+gis = GIS()
+
+# For other login methods see: https://developers.arcgis.com/python/guide/working-with-different-authentication-schemes/
+# use for logging in within active ArcGIS Pro session
+# gis = GIS('pro')
+
+# Create a function that returns a list of feature layer collections for a search
+def agolSearch(term):
+    item_list = []
+    items = gis.content.search(term, item_type="Feature Layer Collection")
+    for item in items:
+        item_list.append(item)
+    return item_list
+  
+results = agolSearch('search terms')
+results_select = results[0] # select the index postions at which the item you want is positione. This example selects the first result.
+# Create dataframe from selected dataset
+results_select_df = results_select.layers[0].query().df
+
+# Check out the first 5 records of the new DataFrame
+results_select_df.head()</code></pre>
+    </noscript>
+</div>
+<h1>Here's another</h1>
+<div class="gist">
+    <script src='https://gist.github.com/0240063363f4d3b36434ebfe46904f5d.js'></script>
+    <noscript>
+        <pre><code>{"type":"FeatureCollection","features":[{"type":"Feature","properties":{"title":"Lenox Library","icon":"library"},"geometry":{"type":"Point","coordinates":[-73.2846075296402,42.357402275315934]}},{"type":"Feature","properties":{"title":"Prime","icon":"restaurant"},"geometry":{"type":"Point","coordinates":[-73.28294724225998,42.359822294281145]}}]}</code></pre>
+    </noscript>
+</div></div>
+	<hr>
+	<h2>Comments</h2>
+</div>
 		</div>
 	</div> 	<!-- <hr> -->
 </div> <!-- /container -->
