@@ -38,4 +38,4 @@ MARKUP = ('md', 'ipynb')
 THEME = "themes/aboutwilson"
 
 PLUGIN_PATHS = ['./plugins']
-PLUGINS = ['ipynb.markup']
+PLUGINS = ['ipynb.markup', 'pelican_gist']
