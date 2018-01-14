@@ -22,4 +22,16 @@ def remoteGeoJSONToGDF(url, display = False):
         gdf.plot()
     return gdf&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
-&lt;/div&gt;</summary><category term="geopandas"></category><category term="geojson"></category><category term="Python Pandas"></category><category term="Python"></category></entry></feed>
+&lt;/div&gt;
+&lt;p&gt;What’s going on here? We use requests to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, gdf, by having gpd.GeoDataFrame.from_features() iterate through the features in our GeoJSON. Finally, we return gdf so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set display to True when you call the function.&lt;/p&gt;
+&lt;p&gt;For example, let’s say we want to look at the City of Raleigh council districts:&lt;/p&gt;
+&lt;div class="gist"&gt;
+    &lt;script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'&gt;&lt;/script&gt;
+    &lt;noscript&gt;
+        &lt;pre&gt;&lt;code&gt;districts = remoteGeoJSONToGDF('http://data-ral.opendata.arcgis.com/datasets/9a5733e13dd14e2f80f8517738ce8cc6_2.geojson')
+districts.plot(column = 'COUNCIL_DIST')&lt;/code&gt;&lt;/pre&gt;
+    &lt;/noscript&gt;
+&lt;/div&gt;
+&lt;p&gt;In line 1 we pass the URL of council district GeoJSON on Raleigh’s open data site and assign the returned GeoDataFrame to a variable, districts. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Plot of Raleigh city council districts generated from remote GeoJSON" src="http://ryan-m-cooper.com/blog/images/remote-geojson-to-geodataframe_1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!&lt;/p&gt;</summary><category term="geopandas"></category><category term="geojson"></category><category term="Python Pandas"></category><category term="Python"></category></entry></feed>
