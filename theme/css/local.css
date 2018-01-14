@@ -100,5 +100,40 @@ div.collapseheader {
 	background-color: #d3d3d3;
 	padding: 2px;
 	cursor: pointer;
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "Raleway",sans-serif;
+}
+
+/* Custom */
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Raleway",sans-serif;
+}
+body {
+    background-color: #E8E8E8;
+}
+.page-header {
+    background-color: #fdc750;
+}
+#main-body {
+    padding-top:15px;
+}
+
+.article {
+    background-color: #ffffff;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+a {
+    color: #444;
+}
+
+a:hover {
+    color: #444;
+    text-decoration: underline;
+}
+
+footer>div>div>div {
+    margin-top: 10px;
 }
