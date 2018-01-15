@@ -55,10 +55,13 @@
 		<span itemprop="keywords">
 			<a href="http://ryan-m-cooper.com/blog/tag/leafletjs.html" rel="tag">LeafletJS</a>
 		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/web-maps.html" rel="tag">web maps</a>
+		</span>
 	</div>
 	<div itemprop="articleBody" class="article-body"><h1>Loading External GeoJSON: A(nother) Way to Do It with jQuery</h1>
 <p>It’s a common mistake for those of us getting into making maps with Leaflet: After running through a few examples, the excited mapper is ready to make a visualization from their own data. We get everything set-up and call <code>L.geoJSON()</code> on some data onto a web server. <em>CTRL+S…F5…</em></p>
-<p><img alt="Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet" src="https://cdn-images-1.medium.com/max/1000/1*eC8n9vbKDgXS0_7dsFDclw.png" /></p>
+<p><img alt="Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_1.png" /></p>
 <p>Let me just get this admission out of the way: I don’t really understand asynchronous loading or callbacks. As such, I spend a lot of time that could be dedicated to learning about asynchronous loading and callbacks instead trying to find ways to load data in the more linear, step-wise fashion. Here’s what I want to do:</p>
 <ol>
 <li>Get some external data</li>
@@ -112,7 +115,7 @@ v1</a>.</p>
 </code></pre>
     </noscript>
 </div>
-<p><img alt="Our basic starter map." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />]
+<p><img alt="Our basic starter map." src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_2.png" />]
 (<em><a href="http://bl.ocks.org/maptastik/raw/749ca67f1d96f896b1d4c58d7a1e7739/">View full
 map</a></em>)</p>
 <h3>Add jQuery</h3>
@@ -163,7 +166,7 @@ map</a></em>)</p>
 </html></code></pre>
     </noscript>
 </div>
-<p><img alt="Our map with jQuery included. Nothing changed. That’s OK!" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+<p><img alt="Our map with jQuery included. Nothing changed. That’s OK!" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_2.png" />
 (<em><a href="http://bl.ocks.org/maptastik/c2169793e9cc4f90bbab20cf20a56fc4">View full map</a>)</em>)</p>
 <p>Our map should look the same as it did earlier. That’s fine. All we did was add jQuery. We haven’t actually asked jQuery to help us do anything though. Let’s change that.</p>
 <h3>Load external data with AJAX</h3>
@@ -234,7 +237,7 @@ map</a></em>)</p>
 </code></pre>
     </noscript>
 </div>
-<p><img alt="" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+<p><img alt="Map centered on Kentucky" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_2.png" />
 (<em><a href="http://bl.ocks.org/maptastik/fbdbbef6c5ac72fbad775812fdcd9d33">View full map</a></em>)</p>
 <p>What’s happening here? When jQuery makes the AJAX request, it tries to get whatever is at the URL we specified. If there is an error, we get an alert with some information about what went wrong. If the request is successful, we get a little message in our console to tell us so. Ultimately, the variable <code>counties</code> will be the result of that request and we will be able to continue with our map.</p>
 <p>Our map still won’t look any different, but behind the scenes we’ve done what we need to request the external GeoJSON data we want to add to our map. You can check this by opening your developer tools printing <code>counties</code> to the console.</p>
@@ -242,7 +245,7 @@ map</a></em>)</p>
 </pre></div>
 
 
-<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*VWLZbytmQiYygWOvrfVEmw.png" /></p>
+<p><img alt="The returned value for counties printed to the console" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_3.png" /></p>
 <p>You might have expected that <code>counties</code> would be the raw GeoJSON from the specified URL. It isn’t. Instead, <code>counties</code> is an <strong><a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpResponse object</a></strong> with a whole lot of information regarding our data request. However, notice the <code>responseJSON</code> value. We got that property because we set:</p>
 <div class="highlight"><pre><span></span>```JavaScript
 responseType: &quot;json&quot;,
@@ -319,12 +322,12 @@ responseType: &quot;json&quot;,
 </code></pre>
     </noscript>
 </div>
-<p><img alt="This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+<p><img alt="This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn." src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_2.png" />
 (<em><a href="http://bl.ocks.org/maptastik/e7ac58edd5f34fb9487faa711ffc4fb8">View full map</a></em>)</p>
 <p>Again, our map won’t look any different than it did before, but behind the scenes there is a different story. If we look at our previous map, our data request and rendering of our map happened at the same time. In fact, the map rendering finished before the data request was completed!</p>
-<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*1bjLFjwOnOP57NvamyHmoQ.png" /></p>
+<p><img alt="A look at the network response without AJAX" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_4.png" /></p>
 <p>By using <code>.when()</code> and <code>.done()</code>, we’ve made it so the map does not render until the data request is completed.</p>
-<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*2iOttenDMYT3mltt8T364Q.png" /></p>
+<p><img alt="A look at the network response with AJAX" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_5.png" /></p>
 <h3>Adding External GeoJSON to the Map</h3>
 <p>Now that we’ve set up our app to request the external data first and the rest of the map after that request has has completed, we can finally get to mashing our data onto our map.</p>
 <p>With Leaflet, we can use <a href="http://leafletjs.com/reference-1.0.3.html#geojson"><code>L.geoJSON()</code></a> to add GeoJSON data to a map. Earlier, when we made our AJAX request for data, we stored the result in a variable, <code>counties</code>. But if we call…</p>
@@ -333,12 +336,12 @@ responseType: &quot;json&quot;,
 
 
 <p>…we will get an error. Why? Because the value of <code>counties</code> is not the raw GeoJSON located at the URL we passed to our request. It is an <code>XMLHttpRequest</code> object that contains information about the request. One of the properties of that object is <code>responseJSON</code>. We looked at earlier and thought it looked a lot like GeoJSON. What if we try accessing that property with <code>L.geoJSON()</code>?</p>
-<div class="highlight"><pre><span></span>    <span class="nx">L</span><span class="p">.</span><span class="nx">geoJSON</span><span class="p">(</span><span class="nx">counties</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><span class="nx">L</span><span class="p">.</span><span class="nx">geoJSON</span><span class="p">(</span><span class="nx">counties</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
 </pre></div>
 
 
 <p>Assuming our data request is successful, we should get a map of Kentucky counties with Leaflet’s default blue styling.</p>
-<p><img alt="Map of Kentucky counties with data loaded from external GeoJSON" src="https://cdn-images-1.medium.com/max/800/1*zjuy-oWYCck5DcdkVyhIIQ.png" /></p>
+<p><img alt="Map of Kentucky counties with data loaded from external GeoJSON" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_6.png" /></p>
 <p>(<em>(<a href="http://bl.ocks.org/maptastik/00312131250f9c8b534d97d1be258f1a">View full map</a></em>)</p>
 <div class="gist">
     <script src='https://gist.github.com/00312131250f9c8b534d97d1be258f1a.js'></script>
@@ -428,7 +431,6 @@ Mapbox.js”</a> — Lyzi Diamond</li>
 						<h4>Navigation</h4>
 						<ul class="list-unstyled my-list-style">
 							<li><a href="http://ryan-m-cooper.com/blog">Maptastik!</a></li>
-							<li><a href="http://ryan-m-cooper.com/blog/feeds/all.atom.xml" type="application/atom+xml"><i class="fa fa-rss "></i> atom</a></li>
 						</ul>
 					</div>
 					<div class="col-md-3">

@@ -36,7 +36,7 @@ districts.plot(column = 'COUNCIL_DIST')&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;img alt="Plot of Raleigh city council districts generated from remote GeoJSON" src="http://ryan-m-cooper.com/blog/images/remote-geojson-to-geodataframe_1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!&lt;/p&gt;</summary><category term="geopandas"></category><category term="geojson"></category><category term="Python Pandas"></category><category term="Python"></category></entry><entry><title>Loading External GeoJSON: A(nother) Way to Do It with jQuery</title><link href="http://ryan-m-cooper.com/blog/loading-external-geojson.html" rel="alternate"></link><published>2018-01-14T22:15:00-05:00</published><updated>2018-01-14T22:15:00-05:00</updated><author><name>Ryan Cooper</name></author><id>tag:ryan-m-cooper.com,2017-02-08:blog/loading-external-geojson.html</id><summary type="html">&lt;h1&gt;Loading External GeoJSON: A(nother) Way to Do It with jQuery&lt;/h1&gt;
 &lt;p&gt;It’s a common mistake for those of us getting into making maps with Leaflet: After running through a few examples, the excited mapper is ready to make a visualization from their own data. We get everything set-up and call &lt;code&gt;L.geoJSON()&lt;/code&gt; on some data onto a web server. &lt;em&gt;CTRL+S…F5…&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet" src="https://cdn-images-1.medium.com/max/1000/1*eC8n9vbKDgXS0_7dsFDclw.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet" src="{filename}/images/loading-external-geojson_1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Let me just get this admission out of the way: I don’t really understand asynchronous loading or callbacks. As such, I spend a lot of time that could be dedicated to learning about asynchronous loading and callbacks instead trying to find ways to load data in the more linear, step-wise fashion. Here’s what I want to do:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Get some external data&lt;/li&gt;
@@ -90,7 +90,7 @@ v1&lt;/a&gt;.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;img alt="Our basic starter map." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" /&gt;]
+&lt;p&gt;&lt;img alt="Our basic starter map." src="{filename}/images/loading-external-geojson_2.png" /&gt;]
 (&lt;em&gt;&lt;a href="http://bl.ocks.org/maptastik/raw/749ca67f1d96f896b1d4c58d7a1e7739/"&gt;View full
 map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;h3&gt;Add jQuery&lt;/h3&gt;
@@ -141,7 +141,7 @@ map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;/html&gt;&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;img alt="Our map with jQuery included. Nothing changed. That’s OK!" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" /&gt;
+&lt;p&gt;&lt;img alt="Our map with jQuery included. Nothing changed. That’s OK!" src="{filename}/images/loading-external-geojson_2.png" /&gt;
 (&lt;em&gt;&lt;a href="http://bl.ocks.org/maptastik/c2169793e9cc4f90bbab20cf20a56fc4"&gt;View full map&lt;/a&gt;)&lt;/em&gt;)&lt;/p&gt;
 &lt;p&gt;Our map should look the same as it did earlier. That’s fine. All we did was add jQuery. We haven’t actually asked jQuery to help us do anything though. Let’s change that.&lt;/p&gt;
 &lt;h3&gt;Load external data with AJAX&lt;/h3&gt;
@@ -212,7 +212,7 @@ map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;img alt="" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" /&gt;
+&lt;p&gt;&lt;img alt="Map centered on Kentucky" src="{filename}/images/loading-external-geojson_2.png" /&gt;
 (&lt;em&gt;&lt;a href="http://bl.ocks.org/maptastik/fbdbbef6c5ac72fbad775812fdcd9d33"&gt;View full map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;p&gt;What’s happening here? When jQuery makes the AJAX request, it tries to get whatever is at the URL we specified. If there is an error, we get an alert with some information about what went wrong. If the request is successful, we get a little message in our console to tell us so. Ultimately, the variable &lt;code&gt;counties&lt;/code&gt; will be the result of that request and we will be able to continue with our map.&lt;/p&gt;
 &lt;p&gt;Our map still won’t look any different, but behind the scenes we’ve done what we need to request the external GeoJSON data we want to add to our map. You can check this by opening your developer tools printing &lt;code&gt;counties&lt;/code&gt; to the console.&lt;/p&gt;
@@ -220,7 +220,7 @@ map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;img alt="" src="https://cdn-images-1.medium.com/max/1000/1*VWLZbytmQiYygWOvrfVEmw.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="The returned value for counties printed to the console" src="{filename}/images/loading-external-geojson_3.png" /&gt;&lt;/p&gt;
 &lt;p&gt;You might have expected that &lt;code&gt;counties&lt;/code&gt; would be the raw GeoJSON from the specified URL. It isn’t. Instead, &lt;code&gt;counties&lt;/code&gt; is an &lt;strong&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest"&gt;XMLHttpResponse object&lt;/a&gt;&lt;/strong&gt; with a whole lot of information regarding our data request. However, notice the &lt;code&gt;responseJSON&lt;/code&gt; value. We got that property because we set:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;```JavaScript
 responseType: &amp;quot;json&amp;quot;,
@@ -297,12 +297,12 @@ responseType: &amp;quot;json&amp;quot;,
 &lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;img alt="This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" /&gt;
+&lt;p&gt;&lt;img alt="This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn." src="{filename}/images/loading-external-geojson_2.png" /&gt;
 (&lt;em&gt;&lt;a href="http://bl.ocks.org/maptastik/e7ac58edd5f34fb9487faa711ffc4fb8"&gt;View full map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;p&gt;Again, our map won’t look any different than it did before, but behind the scenes there is a different story. If we look at our previous map, our data request and rendering of our map happened at the same time. In fact, the map rendering finished before the data request was completed!&lt;/p&gt;
-&lt;p&gt;&lt;img alt="" src="https://cdn-images-1.medium.com/max/1000/1*1bjLFjwOnOP57NvamyHmoQ.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="A look at the network response without AJAX" src="{filename}/images/loading-external-geojson_4.png" /&gt;&lt;/p&gt;
 &lt;p&gt;By using &lt;code&gt;.when()&lt;/code&gt; and &lt;code&gt;.done()&lt;/code&gt;, we’ve made it so the map does not render until the data request is completed.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="" src="https://cdn-images-1.medium.com/max/1000/1*2iOttenDMYT3mltt8T364Q.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="A look at the network response with AJAX" src="{filename}/images/loading-external-geojson_5.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Adding External GeoJSON to the Map&lt;/h3&gt;
 &lt;p&gt;Now that we’ve set up our app to request the external data first and the rest of the map after that request has has completed, we can finally get to mashing our data onto our map.&lt;/p&gt;
 &lt;p&gt;With Leaflet, we can use &lt;a href="http://leafletjs.com/reference-1.0.3.html#geojson"&gt;&lt;code&gt;L.geoJSON()&lt;/code&gt;&lt;/a&gt; to add GeoJSON data to a map. Earlier, when we made our AJAX request for data, we stored the result in a variable, &lt;code&gt;counties&lt;/code&gt;. But if we call…&lt;/p&gt;
@@ -311,12 +311,12 @@ responseType: &amp;quot;json&amp;quot;,
 
 
 &lt;p&gt;…we will get an error. Why? Because the value of &lt;code&gt;counties&lt;/code&gt; is not the raw GeoJSON located at the URL we passed to our request. It is an &lt;code&gt;XMLHttpRequest&lt;/code&gt; object that contains information about the request. One of the properties of that object is &lt;code&gt;responseJSON&lt;/code&gt;. We looked at earlier and thought it looked a lot like GeoJSON. What if we try accessing that property with &lt;code&gt;L.geoJSON()&lt;/code&gt;?&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="nx"&gt;L&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;geoJSON&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;counties&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;responseJSON&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;addTo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;map&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nx"&gt;L&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;geoJSON&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;counties&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;responseJSON&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;addTo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;map&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Assuming our data request is successful, we should get a map of Kentucky counties with Leaflet’s default blue styling.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Map of Kentucky counties with data loaded from external GeoJSON" src="https://cdn-images-1.medium.com/max/800/1*zjuy-oWYCck5DcdkVyhIIQ.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Map of Kentucky counties with data loaded from external GeoJSON" src="{filename}/images/loading-external-geojson_6.png" /&gt;&lt;/p&gt;
 &lt;p&gt;(&lt;em&gt;(&lt;a href="http://bl.ocks.org/maptastik/00312131250f9c8b534d97d1be258f1a"&gt;View full map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 &lt;div class="gist"&gt;
     &lt;script src='https://gist.github.com/00312131250f9c8b534d97d1be258f1a.js'&gt;&lt;/script&gt;
@@ -389,4 +389,4 @@ Mapbox.js”&lt;/a&gt; — Lyzi Diamond&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://zevross.com/blog/2014/10/28/tips-for-creating-leafleft-js-maps/"&gt;“Creating a Leaflet.js mapping app from the ground up”&lt;/a&gt; — Zev Ross&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://maptimeboston.github.io/leaflet-intro/"&gt;“Leaflet: Make a web map!”&lt;/a&gt; — Ryan Mullins &amp;amp; Andy Woodruff (maptimeBoston)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;If you want to avoid using jQuery, I’d recommend checking out &lt;a href="http://youmightnotneedjquery.com/"&gt;“YOU MIGHT NOT NEED JQUERY”&lt;/a&gt;.&lt;/p&gt;</summary><category term="geojson"></category><category term="jQuery"></category><category term="JavaScript"></category><category term="LeafletJS"></category></entry></feed>
+&lt;p&gt;If you want to avoid using jQuery, I’d recommend checking out &lt;a href="http://youmightnotneedjquery.com/"&gt;“YOU MIGHT NOT NEED JQUERY”&lt;/a&gt;.&lt;/p&gt;</summary><category term="geojson"></category><category term="jQuery"></category><category term="JavaScript"></category><category term="LeafletJS"></category><category term="web maps"></category></entry></feed>
