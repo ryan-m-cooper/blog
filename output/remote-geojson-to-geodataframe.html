@@ -38,7 +38,7 @@
 	<div>
 		Category:
 		<span itemprop="articleSection">
-			<a href="http://ryan-m-cooper.com/blog/category/python.html" rel="category">Python</a>
+			<a href="http://ryan-m-cooper.com/blog/category/how-to.html" rel="category">How-To</a>
 		</span>
 	</div>
 	<div>
@@ -80,7 +80,7 @@ def remoteGeoJSONToGDF(url, display = False):
     return gdf</code></pre>
     </noscript>
 </div>
-<p>What’s going on here? We use <code>requests</code> to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, <code>gdf</code>, by using <code>gpd.GeoDataFrame.from_features()</code> iterate through the features in our GeoJSON. Finally, we return <code>gdf</code> so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set <code>display</code> to <code>True</code> when you call the function.</p>
+<p>What’s going on here? We use <strong><a href="http://docs.python-requests.org/en/master/">requests</a></strong> to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, <code>gdf</code>, by using <code>gpd.GeoDataFrame.from_features()</code> iterate through the features in our GeoJSON. Finally, we return <code>gdf</code> so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set <code>display</code> to <code>True</code> when you call the function.</p>
 <p>For example, let’s say we want to look at the City of Raleigh council districts:</p>
 <div class="gist">
     <script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'></script>
@@ -108,7 +108,6 @@ districts.plot(column = 'COUNCIL_DIST')</code></pre>
 						<h4>Navigation</h4>
 						<ul class="list-unstyled my-list-style">
 							<li><a href="http://ryan-m-cooper.com/blog">Maptastik!</a></li>
-							<li><a href="http://ryan-m-cooper.com/blog/feeds/all.atom.xml" type="application/atom+xml"><i class="fa fa-rss "></i> atom</a></li>
 						</ul>
 					</div>
 					<div class="col-md-3">
@@ -119,7 +118,7 @@ districts.plot(column = 'COUNCIL_DIST')</code></pre>
 					<div class="col-md-3">
 						<h4>Categories</h4>
 						<ul class="list-unstyled my-list-style">
-							<li><a href="http://ryan-m-cooper.com/blog/category/python.html">Python (1)</a></li>
+							<li><a href="http://ryan-m-cooper.com/blog/category/how-to.html">How-To (2)</a></li>
 						</ul>
 					</div>
 				</div>

@@ -1,7 +1,7 @@
 Title: Remote GeoJSON to GeoDataFrame
 Date: 2017-11-01 13:00
 Modified: 2018-01-14 16:56
-Category: Python
+Category: How-To
 Tags: geopandas, geojson, Python Pandas, Python
 Slug: remote-geojson-to-geodataframe
 Authors: Ryan Cooper
