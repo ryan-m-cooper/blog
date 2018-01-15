@@ -221,22 +221,15 @@ map&lt;/a&gt;&lt;/em&gt;)&lt;/p&gt;
 
 
 &lt;p&gt;&lt;img alt="The returned value for counties printed to the console" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_3.png" /&gt;&lt;/p&gt;
-&lt;p&gt;You might have expected that &lt;code&gt;counties&lt;/code&gt; would be the raw GeoJSON from the specified URL. It isn’t. Instead, &lt;code&gt;counties&lt;/code&gt; is an &lt;strong&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest"&gt;XMLHttpResponse object&lt;/a&gt;&lt;/strong&gt; with a whole lot of information regarding our data request. However, notice the &lt;code&gt;responseJSON&lt;/code&gt; value. We got that property because we set:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;```JavaScript
-responseType: &amp;quot;json&amp;quot;,
-```
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.&lt;/p&gt;
+&lt;p&gt;You might have expected that &lt;code&gt;counties&lt;/code&gt; would be the raw GeoJSON from the specified URL. It isn’t. Instead, &lt;code&gt;counties&lt;/code&gt; is an &lt;strong&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest"&gt;XMLHttpResponse object&lt;/a&gt;&lt;/strong&gt; with a whole lot of information regarding our data request. However, notice the &lt;code&gt;responseJSON&lt;/code&gt; value. We got that property because we set &lt;code&gt;responseType: "json"&lt;/code&gt; in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.&lt;/p&gt;
 &lt;h3&gt;&lt;code&gt;.when()&lt;/code&gt; &amp;amp; &lt;code&gt;.done()&lt;/code&gt;&lt;/h3&gt;
 &lt;p&gt;One of the advantages of AJAX is that your page can load even if the the AJAX request is slow or fails. In our case, we’re trying to wrangle that functionality a bit in order to control the order in which elements of our map load. Specifically, we don’t want our map to load until the data request has finished. The reason for this is that it is possible that the code that draw our map could execute before our data request is finished. If that were to happen, then we would potentially be passing a variable, &lt;code&gt;counties&lt;/code&gt;, that has not yet been fully defined. To ensure that everything loads in the proper order and at the proper time, we can chain two jQuery methods together: &lt;a href="http://api.jquery.com/jQuery.when/"&gt;&lt;code&gt;.when()&lt;/code&gt;&lt;/a&gt; and &lt;a href="http://api.jquery.com/deferred.done/"&gt;&lt;code&gt;.done()&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;    &lt;span class="nt"&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
-    // Load data with .ajax()
-    $.when(data).done(function(){
-      //Do something
-    });
-    &lt;span class="nt"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nt"&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+// Load data with .ajax()
+$.when(data).done(function(){
+  //Do something
+});
+&lt;span class="nt"&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
