@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Loading External GeoJSON: A(nother) Way to Do It with jQuery — Maptastik!</title>
+	<meta name="description" content="Title: Loading External GeoJSON: A(nother) Way to Do It with jQuery; Date: 2017-02-08; Author: Ryan Cooper">
+	<meta name="author" content="Ryan Cooper">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://ryan-m-cooper.com/blog/theme/html5.js"></script>
+		<![endif]-->
+	<link href="http://ryan-m-cooper.com/blog/theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<!-- <link href="http://ryan-m-cooper.com/blog/theme/css/local.css" rel="stylesheet">
+	<link href="http://ryan-m-cooper.com/blog/theme/css/pygments.css" rel="stylesheet"> -->
+    <link href="./theme/css/local.css" rel="stylesheet">
+	<link href="./theme/css/pygments.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<div class="page-header">
+		<h1><a href="http://ryan-m-cooper.com/blog/">Maptastik!</a>
+			<br>	</div>
+	<div class="row">
+		<div id="main-body" class="col-md-8 col-md-offset-2">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Loading External GeoJSON: A(nother) Way to Do It with jQuery</h1>
+		<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+			<h4 itemprop="name">Ryan Cooper</h4>
+		</span>
+		<time datetime="2017-02-08T00:00:00-05:00" itemprop="datePublished">Wed 08 February 2017</time>
+	</div>
+	<div>
+		Category:
+		<span itemprop="articleSection">
+			<a href="http://ryan-m-cooper.com/blog/category/how-to.html" rel="category">How-To</a>
+		</span>
+	</div>
+	<div>
+		Tags:
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/geojson.html" rel="tag">geojson</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/jquery.html" rel="tag">jQuery</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/javascript.html" rel="tag">JavaScript</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ryan-m-cooper.com/blog/tag/leafletjs.html" rel="tag">LeafletJS</a>
+		</span>
+	</div>
+	<div itemprop="articleBody" class="article-body"><h1>Loading External GeoJSON: A(nother) Way to Do It with jQuery</h1>
+<p>It’s a common mistake for those of us getting into making maps with Leaflet: After running through a few examples, the excited mapper is ready to make a visualization from their own data. We get everything set-up and call <code>L.geoJSON()</code> on some data onto a web server. <em>CTRL+S…F5…</em></p>
+<p><img alt="Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet" src="https://cdn-images-1.medium.com/max/1000/1*eC8n9vbKDgXS0_7dsFDclw.png" /></p>
+<p>Let me just get this admission out of the way: I don’t really understand asynchronous loading or callbacks. As such, I spend a lot of time that could be dedicated to learning about asynchronous loading and callbacks instead trying to find ways to load data in the more linear, step-wise fashion. Here’s what I want to do:</p>
+<ol>
+<li>Get some external data</li>
+<li>Make a map with that data</li>
+</ol>
+<p>I like using GeoJSON as my data format for map data, but I don’t like hard-coding it into my map script. I want to load it from somewhere else and assign it a variable within my map script because that’s how <a href="http://leafletjs.com/examples/geojson/">the official tutorial on using GeoJSON in Leaflet</a> more or less suggests I could do it. I also don’t necessarily want to pull my data from the same directory as my project. I want to start each project with the assumption that my data will be coming from an external service because that’s where most of my data is located.</p>
+<p>The problem is that my basic workflow for loading GeoJSON into a map is at odds with my technical ability to use callbacks. What to do? In this post I will demonstrate how I use <code>jQuery.ajax</code> and jQuery’s <code>.when()</code>/<code>.done()</code> functionality to load external GeoJSON into a webmap. We won’t be avoiding asynchronicity or callbacks entirely, but will be taming them in a way that allows us to create a Leaflet map with external data that doesn’t involve a descent into <a href="http://callbackhell.com/">“callback hell”</a>.</p>
+<h3>Set up a Map</h3>
+<p>We’ll begin with some boilerplate code to get our map started. We’ll generate afull window map focused on Kentucky using <a href="http://leafletjs.com/download.html">Leaflet
+v1</a>.</p>
+<div class="gist">
+    <script src='https://gist.github.com/749ca67f1d96f896b1d4c58d7a1e7739.js'></script>
+    <noscript>
+        <pre><code><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Starter map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map')
+            .setView([37.857507, -85.632935], 7);
+
+        var basemap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+    </script>
+</body>
+
+</html>
+</code></pre>
+    </noscript>
+</div>
+<p><img alt="Our basic starter map." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />]
+(<em><a href="http://bl.ocks.org/maptastik/raw/749ca67f1d96f896b1d4c58d7a1e7739/">View full
+map</a></em>)</p>
+<h3>Add jQuery</h3>
+<p><strong><a href="http://jquery.com/">jQuery</a></strong> has some nice tools that will help us control loading our data and adding it to our map in the order that we want to. I usually load it from <a href="https://developers.google.com/speed/libraries/">Google’s hosted libraries</a>, but you could download it from jQuery and host it yourself if you’d like!</p>
+<p>We’ll add jQuery before our map script. I like to include it as the first script in my map placing it just ahead of Leaflet:</p>
+<div class="gist">
+    <script src='https://gist.github.com/c2169793e9cc4f90bbab20cf20a56fc4.js'></script>
+    <noscript>
+        <pre><code><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Starter map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <!-- Add jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <!-- MAP SCRIPT -->
+    <script>
+        var map = L.map('map')
+            .setView([37.857507, -85.632935], 7);
+
+        var basemap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+    </script>
+</body>
+
+</html></code></pre>
+    </noscript>
+</div>
+<p><img alt="Our map with jQuery included. Nothing changed. That’s OK!" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+(<em><a href="http://bl.ocks.org/maptastik/c2169793e9cc4f90bbab20cf20a56fc4">View full map</a>)</em>)</p>
+<p>Our map should look the same as it did earlier. That’s fine. All we did was add jQuery. We haven’t actually asked jQuery to help us do anything though. Let’s change that.</p>
+<h3>Load external data with AJAX</h3>
+<p><a href="https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started"><strong>AJAX</strong></a> stands for Asynchronous JavaScript and XML. AJAX allows us to send and receive data as well as update a web page without reloading it. For our case, it allows us to fetch external GeoJSON so that we can add it to our map. While you can use AJAX with vanilla JavaScript, <a href="http://api.jquery.com/jquery.ajax/">jQuery has a nice set of AJAX tools</a> that make implementing it, arguably, a little easier.</p>
+<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+    <span class="nx">url</span><span class="o">:&lt;</span><span class="nx">URL</span> <span class="nx">to</span> <span class="nx">data</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nx">dataType</span><span class="o">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+    <span class="nx">success</span><span class="o">:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Data successfully loaded!&quot;</span><span class="p">),</span>
+    <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">statusText</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<p>For our map, we are going to request some GeoJSON that is located at this <a href="https://gist.githubusercontent.com/maptastik/df8e483d5ac1c6cae3dc4a7c02ea9039/raw/9cd46849bddcfa90aab240772a12275408d6d8d0/kyCounties.geojson">here</a>. We will specify a <strong>data type</strong>, JSON, and provide instructions for what should happen if the request succeeds (<code>success</code>)or fails (<code>error</code>). The result of this request will be stored in a variable, <code>counties</code>. We’ll add this code at the very top of our map script.</p>
+<div class="gist">
+    <script src='https://gist.github.com/fbdbbef6c5ac72fbad775812fdcd9d33.js'></script>
+    <noscript>
+        <pre><code><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Starter map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <!-- MAP SCRIPT -->
+    <script>
+    // Add AJAX request for data
+        var counties = $.ajax({
+          url:"https://gist.githubusercontent.com/maptastik/df8e483d5ac1c6cae3dc4a7c02ea9039/raw/9cd46849bddcfa90aab240772a12275408d6d8d0/kyCounties.geojson",
+          dataType: "json",
+          success: console.log("County data successfully loaded."),
+          error: function (xhr) {
+            alert(xhr.statusText)
+          }
+        })
+        var map = L.map('map')
+            .setView([37.857507, -85.632935], 7);
+
+        var basemap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+    </script>
+</body>
+
+</html>
+</code></pre>
+    </noscript>
+</div>
+<p><img alt="" src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+(<em><a href="http://bl.ocks.org/maptastik/fbdbbef6c5ac72fbad775812fdcd9d33">View full map</a></em>)</p>
+<p>What’s happening here? When jQuery makes the AJAX request, it tries to get whatever is at the URL we specified. If there is an error, we get an alert with some information about what went wrong. If the request is successful, we get a little message in our console to tell us so. Ultimately, the variable <code>counties</code> will be the result of that request and we will be able to continue with our map.</p>
+<p>Our map still won’t look any different, but behind the scenes we’ve done what we need to request the external GeoJSON data we want to add to our map. You can check this by opening your developer tools printing <code>counties</code> to the console.</p>
+<div class="highlight"><pre><span></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">counties</span><span class="p">);</span>
+</pre></div>
+
+
+<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*VWLZbytmQiYygWOvrfVEmw.png" /></p>
+<p>You might have expected that <code>counties</code> would be the raw GeoJSON from the specified URL. It isn’t. Instead, <code>counties</code> is an <strong><a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpResponse object</a></strong> with a whole lot of information regarding our data request. However, notice the <code>responseJSON</code> value. We got that property because we set:</p>
+<div class="highlight"><pre><span></span>```JavaScript
+responseType: &quot;json&quot;,
+```
+</pre></div>
+
+
+<p>in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.</p>
+<h3><code>.when()</code> &amp; <code>.done()</code></h3>
+<p>One of the advantages of AJAX is that your page can load even if the the AJAX request is slow or fails. In our case, we’re trying to wrangle that functionality a bit in order to control the order in which elements of our map load. Specifically, we don’t want our map to load until the data request has finished. The reason for this is that it is possible that the code that draw our map could execute before our data request is finished. If that were to happen, then we would potentially be passing a variable, <code>counties</code>, that has not yet been fully defined. To ensure that everything loads in the proper order and at the proper time, we can chain two jQuery methods together: <a href="http://api.jquery.com/jQuery.when/"><code>.when()</code></a> and <a href="http://api.jquery.com/deferred.done/"><code>.done()</code></a>.</p>
+<div class="highlight"><pre><span></span>    <span class="nt">&lt;script&gt;</span>
+    // Load data with .ajax()
+    $.when(data).done(function(){
+      //Do something
+    });
+    <span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+
+<p>In the snippet above we’ve got some data we requested via <code>.ajax()</code>. We then commanded that <em>when</em> the <em>data</em> we requested is <em>done</em> loading, do something. For our map we’ll request the data like we did earlier, but wrap the rest of the map script in our <code>when</code>/<code>done</code> function.</p>
+<div class="gist">
+    <script src='https://gist.github.com/e7ac58edd5f34fb9487faa711ffc4fb8.js'></script>
+    <noscript>
+        <pre><code><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Starter map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <!-- MAP SCRIPT -->
+    <script>
+        var counties = $.ajax({
+          url:"https://gist.githubusercontent.com/maptastik/df8e483d5ac1c6cae3dc4a7c02ea9039/raw/9cd46849bddcfa90aab240772a12275408d6d8d0/kyCounties.geojson",
+          dataType: "json",
+          success: console.log("County data successfully loaded."),
+          error: function (xhr) {
+            alert(xhr.statusText)
+          }
+        })
+        // Specify that this code should run once the county data request is complete
+        $.when(counties).done(function() {
+            var map = L.map('map')
+                .setView([37.857507, -85.632935], 7);
+
+            var basemap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+        });
+    </script>
+</body>
+
+</html>
+</code></pre>
+    </noscript>
+</div>
+<p><img alt="This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn." src="https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png" />
+(<em><a href="http://bl.ocks.org/maptastik/e7ac58edd5f34fb9487faa711ffc4fb8">View full map</a></em>)</p>
+<p>Again, our map won’t look any different than it did before, but behind the scenes there is a different story. If we look at our previous map, our data request and rendering of our map happened at the same time. In fact, the map rendering finished before the data request was completed!</p>
+<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*1bjLFjwOnOP57NvamyHmoQ.png" /></p>
+<p>By using <code>.when()</code> and <code>.done()</code>, we’ve made it so the map does not render until the data request is completed.</p>
+<p><img alt="" src="https://cdn-images-1.medium.com/max/1000/1*2iOttenDMYT3mltt8T364Q.png" /></p>
+<h3>Adding External GeoJSON to the Map</h3>
+<p>Now that we’ve set up our app to request the external data first and the rest of the map after that request has has completed, we can finally get to mashing our data onto our map.</p>
+<p>With Leaflet, we can use <a href="http://leafletjs.com/reference-1.0.3.html#geojson"><code>L.geoJSON()</code></a> to add GeoJSON data to a map. Earlier, when we made our AJAX request for data, we stored the result in a variable, <code>counties</code>. But if we call…</p>
+<div class="highlight"><pre><span></span><span class="nx">L</span><span class="p">.</span><span class="nx">geoJSON</span><span class="p">(</span><span class="nx">counties</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+</pre></div>
+
+
+<p>…we will get an error. Why? Because the value of <code>counties</code> is not the raw GeoJSON located at the URL we passed to our request. It is an <code>XMLHttpRequest</code> object that contains information about the request. One of the properties of that object is <code>responseJSON</code>. We looked at earlier and thought it looked a lot like GeoJSON. What if we try accessing that property with <code>L.geoJSON()</code>?</p>
+<div class="highlight"><pre><span></span>    <span class="nx">L</span><span class="p">.</span><span class="nx">geoJSON</span><span class="p">(</span><span class="nx">counties</span><span class="p">.</span><span class="nx">responseJSON</span><span class="p">).</span><span class="nx">addTo</span><span class="p">(</span><span class="nx">map</span><span class="p">);</span>
+</pre></div>
+
+
+<p>Assuming our data request is successful, we should get a map of Kentucky counties with Leaflet’s default blue styling.</p>
+<p><img alt="Map of Kentucky counties with data loaded from external GeoJSON" src="https://cdn-images-1.medium.com/max/800/1*zjuy-oWYCck5DcdkVyhIIQ.png" /></p>
+<p>(<em>(<a href="http://bl.ocks.org/maptastik/00312131250f9c8b534d97d1be258f1a">View full map</a></em>)</p>
+<div class="gist">
+    <script src='https://gist.github.com/00312131250f9c8b534d97d1be258f1a.js'></script>
+    <noscript>
+        <pre><code><!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>A simple map</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script>
+        var counties = $.ajax({
+            url: "https://gist.githubusercontent.com/maptastik/df8e483d5ac1c6cae3dc4a7c02ea9039/raw/9cd46849bddcfa90aab240772a12275408d6d8d0/kyCounties.geojson",
+            dataType: "json",
+            success: console.log("County data successfully loaded."),
+            error: function(xhr) {
+                alert(xhr.statusText)
+            }
+        })
+        $.when(counties).done(function() {
+            var map = L.map('map')
+                .setView([37.857507, -85.632935], 7);
+
+            var basemap = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+            // Add requested external GeoJSON to map
+            var kyCounties = L.geoJSON(counties.responseJSON).addTo(map);
+        });
+    </script>
+</body>
+
+</html>
+</code></pre>
+    </noscript>
+</div>
+<p>With our external data now in our map, we can carry on styling the counties and adding more interaction.</p>
+<h3>Concluding Thoughts</h3>
+<p>I recognize that this method is not ideal for all circumstances. I suspect that this may not be a method that scales well. For instance, by waiting for the external data request to be completed before rendering the rest of the map, the load time of the whole map is increased. Under normal circumstances, an approach that allows for the data and rest of the map to load at the same time should decrease the overall load time. Nonetheless, I feel like this approach offers a nice stepping stone towards faster, yet more complicated methods of mapping external GeoJSON data.</p>
+<p>Thinking about Leaflet, the workflow I’ve presented looks similar to the workflow demonstrated in the tutorial <a href="http://leafletjs.com/examples/geojson/">“Using GeoJSON with Leaflet”</a>. In that tutorial, GeoJSON is a variable, hard-coded into the map script. That variable is then passed to the <code>L.geoJSON()</code> method. But I would venture to guess that most people do not want to have huge blocks of GeoJSON text in their script. It is messy looking if you have more than a couple point featuers and is not really sustainable if you have a dataset that changes regularly. Furthermore. the workflow demonstrated in that tutorial does not work if you want to grab external data. You have to figure out a new workflow, one which typically requires callbacks. What I like about the method I’ve presented here is that it is similar to the more linear approach used in beginner tutorials. It may have it’s pitfalls, but it allows someone like me to still be able to make a map while trying to better understand more efficient methods of doing so. I hope this post is useful to you as well.</p>
+<h3>Other Resources</h3>
+<p>There are multiple ways to add external data to a map in Leaflet. Here are a few examples and tool for doing just that:</p>
+<ul>
+<li><a href="http://lyzidiamond.com/posts/external-geojson-mapbox">“Adding External GeoJSON with
+Mapbox.js”</a> — Lyzi Diamond</li>
+<li><a href="https://github.com/calvinmetcalf/leaflet-ajax">leaflet-ajax</a> plugin — Calvin Metcalf</li>
+<li><a href="http://zevross.com/blog/2014/10/28/tips-for-creating-leafleft-js-maps/">“Creating a Leaflet.js mapping app from the ground up”</a> — Zev Ross</li>
+<li><a href="https://maptimeboston.github.io/leaflet-intro/">“Leaflet: Make a web map!”</a> — Ryan Mullins &amp; Andy Woodruff (maptimeBoston)</li>
+</ul>
+<p>If you want to avoid using jQuery, I’d recommend checking out <a href="http://youmightnotneedjquery.com/">“YOU MIGHT NOT NEED JQUERY”</a>.</p></div>
+	<hr>
+	<!-- <h2>Comments</h2>
+ -->
+</div>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer>
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="http://ryan-m-cooper.com/blog">Maptastik!</a></li>
+							<li><a href="http://ryan-m-cooper.com/blog/feeds/all.atom.xml" type="application/atom+xml"><i class="fa fa-rss "></i> atom</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="http://ryan-m-cooper.com/blog/category/how-to.html">How-To (2)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ryan Cooper 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.4/gist-embed.min.js"></script>
+</body>
+</html>
