@@ -19,7 +19,7 @@ So during lunch I messed around (e.g. Wrote some Python using [Spyder](https://g
 
 [gist:id=6030df87e8bd62fa583a83ecea9fceab]
 
-What’s going on here? We use `requests` to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, `gdf`, by using `gpd.GeoDataFrame.from_features()` iterate through the features in our GeoJSON. Finally, we return `gdf` so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set `display` to `True` when you call the function.
+What’s going on here? We use **[requests](http://docs.python-requests.org/en/master/)** to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, `gdf`, by using `gpd.GeoDataFrame.from_features()` iterate through the features in our GeoJSON. Finally, we return `gdf` so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set `display` to `True` when you call the function.
 
 For example, let’s say we want to look at the City of Raleigh council districts:
 
