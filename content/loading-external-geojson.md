@@ -2,7 +2,7 @@ Title: Loading External GeoJSON: A(nother) Way to Do It with jQuery
 Date: 2017-02-08 00:00
 Modified: 2018-01-14 22:15
 Category: How-To
-Tags:  geojson, jQuery, JavaScript, LeafletJS
+Tags:  geojson, jQuery, JavaScript, LeafletJS, web maps
 Slug: loading-external-geojson
 Authors: Ryan Cooper
 Summary: Load GeoJSON from a URL for use in Leaflet map.
@@ -11,7 +11,7 @@ Summary: Load GeoJSON from a URL for use in Leaflet map.
 
 It’s a common mistake for those of us getting into making maps with Leaflet: After running through a few examples, the excited mapper is ready to make a visualization from their own data. We get everything set-up and call `L.geoJSON()` on some data onto a web server. *CTRL+S…F5…*
 
-![Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet](https://cdn-images-1.medium.com/max/1000/1*eC8n9vbKDgXS0_7dsFDclw.png)
+![Code and console showing what happens if you try to load GeoJSON from a URL using the L.geoJSON function in Leaflet]({filename}/images/loading-external-geojson_1.png)
 
 Let me just get this admission out of the way: I don’t really understand asynchronous loading or callbacks. As such, I spend a lot of time that could be dedicated to learning about asynchronous loading and callbacks instead trying to find ways to load data in the more linear, step-wise fashion. Here’s what I want to do:
 
@@ -29,7 +29,7 @@ v1](http://leafletjs.com/download.html).
 
 [gist:id=749ca67f1d96f896b1d4c58d7a1e7739]
 
-![Our basic starter map.](https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png)]
+![Our basic starter map.]({filename}/images/loading-external-geojson_2.png)]
 (*[View full
 map](http://bl.ocks.org/maptastik/raw/749ca67f1d96f896b1d4c58d7a1e7739/)*)
 
@@ -41,7 +41,7 @@ We’ll add jQuery before our map script. I like to include it as the first scri
 
 [gist:id=c2169793e9cc4f90bbab20cf20a56fc4]
 
-![Our map with jQuery included. Nothing changed. That’s OK!](https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png)
+![Our map with jQuery included. Nothing changed. That’s OK!]({filename}/images/loading-external-geojson_2.png)
 (*[View full map](http://bl.ocks.org/maptastik/c2169793e9cc4f90bbab20cf20a56fc4))*)
 
 Our map should look the same as it did earlier. That’s fine. All we did was add jQuery. We haven’t actually asked jQuery to help us do anything though. Let’s change that.
@@ -65,7 +65,7 @@ For our map, we are going to request some GeoJSON that is located at this [here]
 
 [gist:id=fbdbbef6c5ac72fbad775812fdcd9d33]
 
-![](https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png)
+![Map centered on Kentucky]({filename}/images/loading-external-geojson_2.png)
 (*[View full map](http://bl.ocks.org/maptastik/fbdbbef6c5ac72fbad775812fdcd9d33)*)
 
 What’s happening here? When jQuery makes the AJAX request, it tries to get whatever is at the URL we specified. If there is an error, we get an alert with some information about what went wrong. If the request is successful, we get a little message in our console to tell us so. Ultimately, the variable `counties` will be the result of that request and we will be able to continue with our map.
@@ -76,7 +76,7 @@ Our map still won’t look any different, but behind the scenes we’ve done wha
 console.log(counties);
 ```
 
-![](https://cdn-images-1.medium.com/max/1000/1*VWLZbytmQiYygWOvrfVEmw.png)
+![The returned value for counties printed to the console]({filename}/images/loading-external-geojson_3.png)
 
 You might have expected that `counties` would be the raw GeoJSON from the specified URL. It isn’t. Instead, `counties` is an **[XMLHttpResponse object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)** with a whole lot of information regarding our data request. However, notice the `responseJSON` value. We got that property because we set:
 
@@ -102,16 +102,16 @@ In the snippet above we’ve got some data we requested via `.ajax()`. We then c
 
 [gist:id=e7ac58edd5f34fb9487faa711ffc4fb8]
 
-![This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn.](https://cdn-images-1.medium.com/max/800/1*tmqaZDxVKdh685JorqwhwQ.png)
+![This map looks the same as the others, but this time the request for our GeoJSON data was completed before the rest of the map was drawn.]({filename}/images/loading-external-geojson_2.png)
 (*[View full map](http://bl.ocks.org/maptastik/e7ac58edd5f34fb9487faa711ffc4fb8)*)
 
 Again, our map won’t look any different than it did before, but behind the scenes there is a different story. If we look at our previous map, our data request and rendering of our map happened at the same time. In fact, the map rendering finished before the data request was completed!
 
-![](https://cdn-images-1.medium.com/max/1000/1*1bjLFjwOnOP57NvamyHmoQ.png)
+![A look at the network response without AJAX]({filename}/images/loading-external-geojson_4.png)
 
 By using `.when()` and `.done()`, we’ve made it so the map does not render until the data request is completed.
 
-![](https://cdn-images-1.medium.com/max/1000/1*2iOttenDMYT3mltt8T364Q.png)
+![A look at the network response with AJAX]({filename}/images/loading-external-geojson_5.png)
 
 ### Adding External GeoJSON to the Map
 
@@ -126,12 +126,12 @@ L.geoJSON(counties).addTo(map);
 …we will get an error. Why? Because the value of `counties` is not the raw GeoJSON located at the URL we passed to our request. It is an `XMLHttpRequest` object that contains information about the request. One of the properties of that object is `responseJSON`. We looked at earlier and thought it looked a lot like GeoJSON. What if we try accessing that property with `L.geoJSON()`?
 
 ```JavaScript
-    L.geoJSON(counties.responseJSON).addTo(map);
+L.geoJSON(counties.responseJSON).addTo(map);
 ```
 
 Assuming our data request is successful, we should get a map of Kentucky counties with Leaflet’s default blue styling.
 
-![Map of Kentucky counties with data loaded from external GeoJSON](https://cdn-images-1.medium.com/max/800/1*zjuy-oWYCck5DcdkVyhIIQ.png)
+![Map of Kentucky counties with data loaded from external GeoJSON]({filename}/images/loading-external-geojson_6.png)
 
 (*([View full map](http://bl.ocks.org/maptastik/00312131250f9c8b534d97d1be258f1a)*)
 
