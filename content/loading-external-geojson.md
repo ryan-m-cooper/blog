@@ -78,24 +78,19 @@ console.log(counties);
 
 ![The returned value for counties printed to the console]({filename}/images/loading-external-geojson_3.png)
 
-You might have expected that `counties` would be the raw GeoJSON from the specified URL. It isn’t. Instead, `counties` is an **[XMLHttpResponse object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)** with a whole lot of information regarding our data request. However, notice the `responseJSON` value. We got that property because we set:
-
-    ```JavaScript
-    responseType: "json",
-    ```
-in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.
+You might have expected that `counties` would be the raw GeoJSON from the specified URL. It isn’t. Instead, `counties` is an **[XMLHttpResponse object](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)** with a whole lot of information regarding our data request. However, notice the `responseJSON` value. We got that property because we set `responseType: "json"` in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.
 
 ### `.when()` & `.done()`
 
 One of the advantages of AJAX is that your page can load even if the the AJAX request is slow or fails. In our case, we’re trying to wrangle that functionality a bit in order to control the order in which elements of our map load. Specifically, we don’t want our map to load until the data request has finished. The reason for this is that it is possible that the code that draw our map could execute before our data request is finished. If that were to happen, then we would potentially be passing a variable, `counties`, that has not yet been fully defined. To ensure that everything loads in the proper order and at the proper time, we can chain two jQuery methods together: [`.when()`](http://api.jquery.com/jQuery.when/) and [`.done()`](http://api.jquery.com/deferred.done/).
 
 ```
-    <script>
-    // Load data with .ajax()
-    $.when(data).done(function(){
-      //Do something
-    });
-    </script>
+<script>
+// Load data with .ajax()
+$.when(data).done(function(){
+  //Do something
+});
+</script>
 ```
 
 In the snippet above we’ve got some data we requested via `.ajax()`. We then commanded that *when* the *data* we requested is *done* loading, do something. For our map we’ll request the data like we did earlier, but wrap the rest of the map script in our `when`/`done` function.

@@ -246,22 +246,15 @@ map</a></em>)</p>
 
 
 <p><img alt="The returned value for counties printed to the console" src="http://ryan-m-cooper.com/blog/images/loading-external-geojson_3.png" /></p>
-<p>You might have expected that <code>counties</code> would be the raw GeoJSON from the specified URL. It isn’t. Instead, <code>counties</code> is an <strong><a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpResponse object</a></strong> with a whole lot of information regarding our data request. However, notice the <code>responseJSON</code> value. We got that property because we set:</p>
-<div class="highlight"><pre><span></span>```JavaScript
-responseType: &quot;json&quot;,
-```
-</pre></div>
-
-
-<p>in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.</p>
+<p>You might have expected that <code>counties</code> would be the raw GeoJSON from the specified URL. It isn’t. Instead, <code>counties</code> is an <strong><a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpResponse object</a></strong> with a whole lot of information regarding our data request. However, notice the <code>responseJSON</code> value. We got that property because we set <code>responseType: "json"</code> in our AJAX request. The resulting value looks a lot like GeoJSON. That’s because it is! We’ll use it shortly.</p>
 <h3><code>.when()</code> &amp; <code>.done()</code></h3>
 <p>One of the advantages of AJAX is that your page can load even if the the AJAX request is slow or fails. In our case, we’re trying to wrangle that functionality a bit in order to control the order in which elements of our map load. Specifically, we don’t want our map to load until the data request has finished. The reason for this is that it is possible that the code that draw our map could execute before our data request is finished. If that were to happen, then we would potentially be passing a variable, <code>counties</code>, that has not yet been fully defined. To ensure that everything loads in the proper order and at the proper time, we can chain two jQuery methods together: <a href="http://api.jquery.com/jQuery.when/"><code>.when()</code></a> and <a href="http://api.jquery.com/deferred.done/"><code>.done()</code></a>.</p>
-<div class="highlight"><pre><span></span>    <span class="nt">&lt;script&gt;</span>
-    // Load data with .ajax()
-    $.when(data).done(function(){
-      //Do something
-    });
-    <span class="nt">&lt;/script&gt;</span>
+<div class="highlight"><pre><span></span><span class="nt">&lt;script&gt;</span>
+// Load data with .ajax()
+$.when(data).done(function(){
+  //Do something
+});
+<span class="nt">&lt;/script&gt;</span>
 </pre></div>
 
 
