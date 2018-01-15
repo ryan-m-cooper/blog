@@ -41,7 +41,6 @@
 			<a href="http://ryan-m-cooper.com/blog/category/python.html" rel="category">Python</a>
 		</span>
 	</div>
- 
 	<div>
 		Tags:
 		<span itemprop="keywords">
@@ -58,10 +57,10 @@
 		</span>
 	</div>
 	<div itemprop="articleBody" class="article-body"><h1>Remote GeoJSON to GeoDataFrame</h1>
-<p>I’m inspired by Stephen Smith’s quick post about rapid prototyping during his lunch break. Lately I’ve been using my lunch break to watch videos that are both related to the work I do for the City of Raleigh Park, Recreation &amp; Cultural Resources Department and of interest to me. But sometimes I’d rather just mess around while I eat my turkey sandwich. I did just that today.</p>
-<p>We’re an Esri shop here at City of Raleigh, so most of my day-to-day is spent in that ecosystem. That said, I’ve been really interested in the Python library geopandas for a bit now and wanted to spend my lunch with it.</p>
-<p>One thing that’s great about geopandas is that you can read in all sorts of different data using gpd.read_file(). That’s great if you have a Shapefile or some GeoJSON on your machine. But what if you want to pull in some data from a URL? gpd.read_file() isn’t going to work.</p>
-<p>So during lunch I messed around (e.g. Wrote some Python using Spyder, Googled things, ducked into Stack Overflow) and cobbled together a little function that takes a URL pointing to some GeoJSON as an input and returns a GeoDataFrame:</p>
+<p>I’m inspired by Stephen Smith’s <a href="https://medium.com/@TheMapSmith/messin-around-with-maps-ce3a3ffd86c">quick post</a> about rapid prototyping during his lunch break. Lately I’ve been using my lunch break to watch videos that are both related to the work I do for the City of Raleigh Park, Recreation &amp; Cultural Resources Department and of interest to me. But sometimes I’d rather just mess around while I eat my turkey sandwich. I did just that today.</p>
+<p>We’re an Esri shop here at City of Raleigh, so most of my day-to-day is spent in that ecosystem. That said, I’ve been really interested in the Python library <strong><a href="http://geopandas.org/index.html">geopandas</a></strong> for a bit now and wanted to spend my lunch with it.</p>
+<p>One thing that’s great about geopandas is that you can read in all sorts of different data using <code>gpd.read_file()</code>. That’s great if you have a Shapefile or some GeoJSON on your machine. But what if you want to pull in some data from a URL? <code>gpd.read_file()</code> isn’t going to work.</p>
+<p>So during lunch I messed around (e.g. Wrote some Python using <a href="https://github.com/spyder-ide">Spyder</a>, Googled things, ducked into <a href="https://stackoverflow.com/questions/37728540/create-a-geodataframe-from-a-geojson-object">Stack Overflow</a>) and cobbled together a little function that takes a URL pointing to some GeoJSON as an input and returns a GeoDataFrame:</p>
 <div class="gist">
     <script src='https://gist.github.com/6030df87e8bd62fa583a83ecea9fceab.js'></script>
     <noscript>
@@ -81,7 +80,7 @@ def remoteGeoJSONToGDF(url, display = False):
     return gdf</code></pre>
     </noscript>
 </div>
-<p>What’s going on here? We use requests to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, gdf, by having gpd.GeoDataFrame.from_features() iterate through the features in our GeoJSON. Finally, we return gdf so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set display to True when you call the function.</p>
+<p>What’s going on here? We use <code>requests</code> to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, <code>gdf</code>, by using <code>gpd.GeoDataFrame.from_features()</code> iterate through the features in our GeoJSON. Finally, we return <code>gdf</code> so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set <code>display</code> to <code>True</code> when you call the function.</p>
 <p>For example, let’s say we want to look at the City of Raleigh council districts:</p>
 <div class="gist">
     <script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'></script>
@@ -90,11 +89,12 @@ def remoteGeoJSONToGDF(url, display = False):
 districts.plot(column = 'COUNCIL_DIST')</code></pre>
     </noscript>
 </div>
-<p>In line 1 we pass the URL of council district GeoJSON on Raleigh’s open data site and assign the returned GeoDataFrame to a variable, districts. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.</p>
+<p>In line 1 we pass the URL of council district GeoJSON on <a href="http://data-ral.opendata.arcgis.com/">Raleigh’s open data site</a> and assign the returned GeoDataFrame to a variable, <code>districts</code>. We can then use geopandas (but really matplotlib) to plot the GeoDataFrame.</p>
 <p><img alt="Plot of Raleigh city council districts generated from remote GeoJSON" src="http://ryan-m-cooper.com/blog/images/remote-geojson-to-geodataframe_1.png" /></p>
 <p>This is a pretty narrow use case for this code and I’m sure there are lots of ways to bork it. Still, I hope you find it useful!</p></div>
 	<hr>
-	<h2>Comments</h2>
+	<!-- <h2>Comments</h2>
+ -->
 </div>
 		</div>
 	</div> 	<!-- <hr> -->
