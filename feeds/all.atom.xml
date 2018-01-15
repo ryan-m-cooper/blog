@@ -23,7 +23,7 @@ def remoteGeoJSONToGDF(url, display = False):
     return gdf&lt;/code&gt;&lt;/pre&gt;
     &lt;/noscript&gt;
 &lt;/div&gt;
-&lt;p&gt;What’s going on here? We use &lt;code&gt;requests&lt;/code&gt; to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, &lt;code&gt;gdf&lt;/code&gt;, by using &lt;code&gt;gpd.GeoDataFrame.from_features()&lt;/code&gt; iterate through the features in our GeoJSON. Finally, we return &lt;code&gt;gdf&lt;/code&gt; so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set &lt;code&gt;display&lt;/code&gt; to &lt;code&gt;True&lt;/code&gt; when you call the function.&lt;/p&gt;
+&lt;p&gt;What’s going on here? We use &lt;strong&gt;&lt;a href="http://docs.python-requests.org/en/master/"&gt;requests&lt;/a&gt;&lt;/strong&gt; to get our GeoJSON from the URL we pass. We then create a GeoDataFrame, &lt;code&gt;gdf&lt;/code&gt;, by using &lt;code&gt;gpd.GeoDataFrame.from_features()&lt;/code&gt; iterate through the features in our GeoJSON. Finally, we return &lt;code&gt;gdf&lt;/code&gt; so that we can access our newly created GeoDataFrame for plotting or doing further analysis. There’s also an option to plot the result if you want. Just set &lt;code&gt;display&lt;/code&gt; to &lt;code&gt;True&lt;/code&gt; when you call the function.&lt;/p&gt;
 &lt;p&gt;For example, let’s say we want to look at the City of Raleigh council districts:&lt;/p&gt;
 &lt;div class="gist"&gt;
     &lt;script src='https://gist.github.com/803cbff714ca3353b62baa2c612905ee.js'&gt;&lt;/script&gt;
