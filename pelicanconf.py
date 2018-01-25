@@ -7,7 +7,7 @@ SITENAME = 'Maptastik!'
 SITEURL = 'http://ryan-m-cooper.com/blog'
 
 PATH = 'content'
-STATIC_PATHS = ['images']
+STATIC_PATHS = ['images', 'assets']
 
 TIMEZONE = 'America/New_York'
 
@@ -33,7 +33,7 @@ AUTHOR_FEED_RSS = None
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
-#RELATIVE_URLS = True
+RELATIVE_URLS = True
 
 MARKUP = ('md', 'ipynb')
 THEME = "themes/aboutwilson"

@@ -2,7 +2,7 @@ Title: Remote GeoJSON to GeoDataFrame
 Date: 2017-11-01 13:00
 Modified: 2018-01-14 16:56
 Category: How-To
-Tags: geopandas, geojson, Python Pandas, Python
+Tags: geopandas, geojson, pandas, Python
 Slug: remote-geojson-to-geodataframe
 Authors: Ryan Cooper
 Summary: How to get geojson from a web source and load it into a geopandas GeoDataFrame

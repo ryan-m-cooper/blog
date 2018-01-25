@@ -1,0 +1,7 @@
+Title: Transforming GPS Points to Line Segments
+Slug: gps-points-to-line-segments
+Date: 2018-01-24 21:00
+Category: How-To
+Tags: geopandas, gps, pandas, Python, shapely
+author: Ryan Cooper
+Summary: How I used geopandas and shapely to generate line segments from gps point data.
